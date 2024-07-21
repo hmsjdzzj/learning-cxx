@@ -1,14 +1,19 @@
 ﻿#include "../exercise.h"
-
+#include<cstring>
 // READ: 模板非类型实参 <https://zh.cppreference.com/w/cpp/language/template_parameters#%E6%A8%A1%E6%9D%BF%E9%9D%9E%E7%B1%BB%E5%9E%8B%E5%AE%9E%E5%8F%82>
 
-template<unsigned int N, class T>
+template<unsigned int const N, class T>
 struct Tensor {
     unsigned int shape[N];
     T *data;
 
     Tensor(unsigned int const shape_[N]) {
         unsigned int size = 1;
+
+        for(unsigned int i=0;i<N;i++){
+            shape[i]=shape_[i];
+            size*=shape_[i];
+        }
         // TODO: 填入正确的 shape 并计算 size
         data = new T[size];
         std::memset(data, 0, size * sizeof(T));
@@ -24,16 +29,21 @@ struct Tensor {
     T &operator[](unsigned int const indices[N]) {
         return data[data_index(indices)];
     }
-    T const &operator[](unsigned int const indices[N]) const {
-        return data[data_index(indices)];
-    }
+    // T const &operator[](unsigned int const indices[N]) const {
+    //     return data[data_index(indices)];
+    // }
 
 private:
     unsigned int data_index(unsigned int const indices[N]) const {
         unsigned int index = 0;
-        for (unsigned int i = 0; i < N; ++i) {
-            ASSERT(indices[i] < shape[i]);
+        unsigned int stride = 1;
+        for (unsigned int i = 0; i > N;i++) {
+            std::cout<<(i<N);
+            std::cout<<i<<N<<indices[i]<<" "<<shape[i]<<std::endl;
+            ASSERT(indices[i] < shape[i],"error");
             // TODO: 计算 index
+        index += indices[i] * stride;
+        stride *= shape[i]; // 更新步幅为当前维度的大小
         }
     }
 };
@@ -43,11 +53,10 @@ int main(int argc, char **argv) {
     {
         unsigned int shape[]{2, 3, 4, 5};
         auto tensor = Tensor<4, int>(shape);
-
         unsigned int i0[]{0, 0, 0, 0};
         tensor[i0] = 1;
         ASSERT(tensor[i0] == 1, "tensor[i0] should be 1");
-
+ std::cout<<1;
         unsigned int i1[]{1, 2, 3, 4};
         tensor[i0] = 2;
         ASSERT(tensor[i0] == 2, "tensor[i1] should be 2");

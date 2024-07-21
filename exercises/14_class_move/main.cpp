@@ -15,9 +15,10 @@ public:
         cache[1]=1;
     }
     // TODO: 实现移动构造器
-    DynFibonacci(DynFibonacci const &other) {
+    DynFibonacci(DynFibonacci  &&other) {
         cache = std::move(other.cache);
         cached = std::move(other.cached);
+        other.cache = nullptr;
     }
 
     // TODO: 实现移动赋值
