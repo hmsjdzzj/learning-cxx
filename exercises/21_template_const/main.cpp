@@ -29,22 +29,22 @@ struct Tensor {
     T &operator[](unsigned int const indices[N]) {
         return data[data_index(indices)];
     }
-    // T const &operator[](unsigned int const indices[N]) const {
-    //     return data[data_index(indices)];
-    // }
+    T const &operator[](unsigned int const indices[N]) const {
+        return data[data_index(indices)];
+    }
 
 private:
     unsigned int data_index(unsigned int const indices[N]) const {
         unsigned int index = 0;
         unsigned int stride = 1;
-        for (unsigned int i = 0; i > N;i++) {
-            std::cout<<(i<N);
-            std::cout<<i<<N<<indices[i]<<" "<<shape[i]<<std::endl;
+        for (unsigned int i = 0; i < N;i++) {
+           // std::cout<<i<<N<<indices[i]<<" "<<shape[i]<<std::endl;
             ASSERT(indices[i] < shape[i],"error");
             // TODO: 计算 index
         index += indices[i] * stride;
         stride *= shape[i]; // 更新步幅为当前维度的大小
         }
+        return index;
     }
 };
 
@@ -58,8 +58,8 @@ int main(int argc, char **argv) {
         ASSERT(tensor[i0] == 1, "tensor[i0] should be 1");
  std::cout<<1;
         unsigned int i1[]{1, 2, 3, 4};
-        tensor[i0] = 2;
-        ASSERT(tensor[i0] == 2, "tensor[i1] should be 2");
+        tensor[i1] = 2;
+        ASSERT(tensor[i1] == 2, "tensor[i1] should be 2");
     }
     {
         unsigned int shape[]{7, 8, 128};
@@ -70,8 +70,8 @@ int main(int argc, char **argv) {
         ASSERT(tensor[i0] == 1.f, "tensor[i0] should be 1");
 
         unsigned int i1[]{3, 4, 99};
-        tensor[i0] = 2.f;
-        ASSERT(tensor[i0] == 2.f, "tensor[i1] should be 2");
+        tensor[i1] = 2.f;
+        ASSERT(tensor[i1] == 2.f, "tensor[i1] should be 2");
     }
     return 0;
 }
